@@ -1,29 +1,25 @@
+import matplotlib.pyplot as plt
+import matplotlib
 from textblob import TextBlob
 
-def detect_feelings(text):
-   # Create a TextBlob object from the input text
-    blob = TextBlob(text)
+def set_text_color(text):
+    # Perform sentiment analysis
+    sentiment = TextBlob(text).sentiment.polarity
 
-    # Calculate the sentiment of the text
-    sentiment = blob.sentiment
+    # Normalize sentiment to a value between 0 and 1
+    norm_sentiment = (sentiment + 1) / 2
 
-    # Extract the polarity and subjectivity scores
-    polarity = sentiment.polarity
-    subjectivity = sentiment.subjectivity
+    # Create a color map with red for negative sentiment, green for positive sentiment
+    cmap = plt.get_cmap('RdYlGn')
 
-    # Determine the overall sentiment of the text
-    if polarity > 0:
-        return "positive"
-    elif polarity == 0:
-        return "neutral"
-    else:
-        return "negative"
+    # Use the color map to get the text color based on the normalized sentiment
+    text_color = cmap(norm_sentiment)
 
-# Test the function with some example input
-text = "i do not want to do anything today"
-feelings = detect_feelings(text)
-print(feelings)  # Output: "positive"
+    # Convert the color to a hex code
+    text_color = matplotlib.colors.to_hex(text_color)
 
-text = "I am feeling very sad today"
-feelings = detect_feelings(text)
-print(feelings)  # Output: "negative"
+    return text_color
+
+text = "I am feeling amazing ever today!"
+color = set_text_color(text)
+print(f"Text color: {color}")
